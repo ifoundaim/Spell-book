@@ -1,0 +1,283 @@
+[
+  {
+    "id": "magic-missile-001",
+    "name": "Magic Missile",
+    "element": "Arcane",
+    "rarity": "Common",
+    "manaCost": 5,
+    "cooldownSec": 3,
+    "description": "Launches three glowing darts of magical force that unerringly strike their target. Cannot miss.",
+    "ingredients": [
+      "Pinch of phosphorous",
+      "Small crystal shard"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "fireball-002",
+    "name": "Fireball",
+    "element": "Fire",
+    "rarity": "Uncommon",
+    "manaCost": 15,
+    "cooldownSec": 8,
+    "description": "A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame.",
+    "ingredients": [
+      "Bat guano",
+      "Sulfur",
+      "Tiny ball of resin"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "frost-bolt-003",
+    "name": "Frost Bolt",
+    "element": "Frost",
+    "rarity": "Common",
+    "manaCost": 4,
+    "cooldownSec": 2,
+    "description": "A bolt of freezing cold energy streaks toward a creature within range, dealing frost damage and potentially slowing the target.",
+    "ingredients": [
+      "Drop of morning dew",
+      "Ice crystal"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "lightning-bolt-004",
+    "name": "Lightning Bolt",
+    "element": "Storm",
+    "rarity": "Uncommon",
+    "manaCost": 12,
+    "cooldownSec": 6,
+    "description": "A stroke of lightning forming a line 100 feet long and 5 feet wide blasts out from you in a direction you choose.",
+    "ingredients": [
+      "Bit of fur",
+      "Rod of amber or crystal",
+      "Piece of copper wire"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "heal-005",
+    "name": "Heal",
+    "element": "Nature",
+    "rarity": "Common",
+    "manaCost": 8,
+    "cooldownSec": 5,
+    "description": "A wave of healing energy flows through a creature you touch, restoring vitality and closing wounds.",
+    "ingredients": [
+      "Sprig of mistletoe",
+      "Drop of holy water"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "mage-armor-006",
+    "name": "Mage Armor",
+    "element": "Arcane",
+    "rarity": "Common",
+    "manaCost": 3,
+    "cooldownSec": 0,
+    "description": "You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends.",
+    "ingredients": [
+      "Piece of cured leather"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "shield-007",
+    "name": "Shield",
+    "element": "Arcane",
+    "rarity": "Common",
+    "manaCost": 2,
+    "cooldownSec": 0,
+    "description": "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC.",
+    "ingredients": [],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "burning-hands-008",
+    "name": "Burning Hands",
+    "element": "Fire",
+    "rarity": "Common",
+    "manaCost": 6,
+    "cooldownSec": 4,
+    "description": "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips.",
+    "ingredients": [],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "ice-shard-009",
+    "name": "Ice Shard",
+    "element": "Frost",
+    "rarity": "Common",
+    "manaCost": 3,
+    "cooldownSec": 2,
+    "description": "You create a shard of ice and fling it at one creature within range. The shard explodes on impact, dealing frost damage.",
+    "ingredients": [
+      "Drop of water",
+      "Pinch of salt"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "shock-010",
+    "name": "Shock",
+    "element": "Storm",
+    "rarity": "Common",
+    "manaCost": 4,
+    "cooldownSec": 3,
+    "description": "A jolt of electricity arcs from your fingertips toward a target within range, dealing electrical damage.",
+    "ingredients": [
+      "Piece of copper",
+      "Static-charged cloth"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "entangle-011",
+    "name": "Entangle",
+    "element": "Nature",
+    "rarity": "Common",
+    "manaCost": 5,
+    "cooldownSec": 6,
+    "description": "Grasping weeds and vines sprout from the ground in a 20-foot square starting from a point within range.",
+    "ingredients": [
+      "Vine tendril",
+      "Seed pod"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "detect-magic-012",
+    "name": "Detect Magic",
+    "element": "Arcane",
+    "rarity": "Common",
+    "manaCost": 1,
+    "cooldownSec": 0,
+    "description": "For the duration, you sense the presence of magic within 30 feet of you. You learn the school of magic, if any.",
+    "ingredients": [
+      "Yew leaf"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "minor-heal-013",
+    "name": "Minor Heal",
+    "element": "Nature",
+    "rarity": "Common",
+    "manaCost": 3,
+    "cooldownSec": 3,
+    "description": "A creature you touch regains a small number of hit points. This spell has no effect on undead or constructs.",
+    "ingredients": [
+      "Herb bundle"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "chill-touch-014",
+    "name": "Chill Touch",
+    "element": "Frost",
+    "rarity": "Common",
+    "manaCost": 2,
+    "cooldownSec": 1,
+    "description": "You create a ghostly, skeletal hand in the space of a creature within range. The target takes necrotic damage and cannot regain hit points until the start of your next turn.",
+    "ingredients": [],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "thunderwave-015",
+    "name": "Thunderwave",
+    "element": "Storm",
+    "rarity": "Uncommon",
+    "manaCost": 10,
+    "cooldownSec": 7,
+    "description": "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw.",
+    "ingredients": [
+      "Piece of mica"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "ray-of-frost-017",
+    "name": "Ray of Frost",
+    "element": "Frost",
+    "rarity": "Common",
+    "manaCost": 3,
+    "cooldownSec": 2,
+    "description": "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target.",
+    "ingredients": [],
+    "createdAt": "2024-01-13T04:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "produce-flame-018",
+    "name": "Produce Flame",
+    "element": "Fire",
+    "rarity": "Common",
+    "manaCost": 2,
+    "cooldownSec": 0,
+    "description": "A flickering flame appears in your hand. The flame remains there for the duration and harms neither you nor your equipment.",
+    "ingredients": [],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "guidance-019",
+    "name": "Guidance",
+    "element": "Nature",
+    "rarity": "Common",
+    "manaCost": 1,
+    "cooldownSec": 0,
+    "description": "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice.",
+    "ingredients": [],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "magic-weapon-020",
+    "name": "Magic Weapon",
+    "element": "Arcane",
+    "rarity": "Rare",
+    "manaCost": 20,
+    "cooldownSec": 10,
+    "description": "You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls.",
+    "ingredients": [
+      "Iron filings",
+      "Drop of mercury"
+    ],
+    "createdAt": "2024-01-13T04:00:00.000Z",
+    "updatedAt": "2024-01-13T04:00:00.000Z"
+  },
+  {
+    "id": "1c5ee4d7-1d54-4e81-841e-ddac6f0bac10",
+    "name": "Lightbloom",
+    "element": "Nature",
+    "rarity": "Rare",
+    "manaCost": 7,
+    "cooldownSec": 11,
+    "description": "Casts a burst of mystical blooms that heal allies.",
+    "ingredients": [
+      "- Petals",
+      "- Dewdrop essence",
+      "- Radiant Moss"
+    ],
+    "createdAt": "2026-01-13T14:04:28.094Z",
+    "updatedAt": "2026-01-13T14:23:37.826Z"
+  }
+]

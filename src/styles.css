@@ -1,0 +1,471 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --parchment: #f4e8d0;
+  --parchment-dark: #e8d9b8;
+  --ink: #2c1810;
+  --ink-light: #5a4a3a;
+  --border-ink: #1a0f08;
+  --shadow: rgba(0, 0, 0, 0.2);
+}
+
+body {
+  font-family: 'Crimson Text', serif;
+  background: var(--parchment);
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.02) 2px,
+      rgba(0, 0, 0, 0.02) 4px
+    );
+  color: var(--ink);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* App Container */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  border-bottom: 3px solid var(--border-ink);
+  border-image: linear-gradient(to right, transparent, var(--border-ink), transparent) 1;
+}
+
+.app-header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--ink);
+  text-shadow: 2px 2px 4px var(--shadow);
+}
+
+/* Main Content Layout */
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  min-height: calc(100vh - 200px);
+}
+
+/* Left Column */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.controls-panel,
+.spell-list-panel,
+.editor-panel {
+  background: var(--parchment-dark);
+  border: 2px solid var(--border-ink);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 
+    0 4px 6px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.controls-panel {
+  flex-shrink: 0;
+}
+
+.spell-list-panel {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+}
+
+.spell-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Right Column */
+.right-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-panel {
+  flex: 1;
+}
+
+/* Controls */
+.search-container {
+  margin-bottom: 15px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px;
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  background: var(--parchment);
+  border: 2px solid var(--border-ink);
+  border-radius: 4px;
+  color: var(--ink);
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--ink-light);
+  box-shadow: 0 0 0 3px rgba(44, 24, 16, 0.1);
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.loaded-count {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: var(--ink-light);
+}
+
+/* Buttons */
+button {
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: 2px solid var(--border-ink);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+button:hover:not(:disabled) {
+  background: var(--parchment-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--parchment);
+  border-color: var(--ink);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--ink-light);
+}
+
+.btn-secondary {
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+.btn-danger {
+  background: #8b1a1a;
+  color: var(--parchment);
+  border-color: #8b1a1a;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #a02020;
+}
+
+/* Spell Cards */
+.spell-card {
+  background: var(--parchment);
+  border: 2px solid var(--border-ink);
+  border-radius: 6px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px var(--shadow);
+}
+
+.spell-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 8px var(--shadow);
+  border-color: var(--ink-light);
+}
+
+.spell-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.spell-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  flex: 1;
+}
+
+.spell-card-badges {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.spell-card-meta {
+  font-size: 0.9rem;
+  color: var(--ink-light);
+  display: flex;
+  gap: 8px;
+}
+
+/* Element Chips */
+.element-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Rarity Badges */
+.rarity-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Editor Form */
+.editor-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--border-ink);
+}
+
+.editor-header h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.8rem;
+  color: var(--ink);
+}
+
+.spell-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  font-family: 'Crimson Text', serif;
+  font-size: 1rem;
+  background: var(--parchment);
+  border: 2px solid var(--border-ink);
+  border-radius: 4px;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--ink-light);
+  box-shadow: 0 0 0 3px rgba(44, 24, 16, 0.1);
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 2px solid var(--border-ink);
+}
+
+.form-actions-right {
+  display: flex;
+  gap: 10px;
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-light);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.empty-message,
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-light);
+  font-size: 1.1rem;
+}
+
+.error-message {
+  color: #8b1a1a;
+}
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  background: var(--ink);
+  color: var(--parchment);
+  padding: 12px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px var(--shadow);
+  min-width: 250px;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.toast-success {
+  background: #16a34a;
+}
+
+.toast-error {
+  background: #8b1a1a;
+}
+
+.toast-info {
+  background: var(--ink);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+
+  .spell-list-panel {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-actions-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .loaded-count {
+    margin-left: 0;
+    text-align: center;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "spell-book",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:server": "cd server && node index.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\""
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "concurrently": "^8.2.2"
+  }
+}
