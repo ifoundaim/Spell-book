@@ -31,7 +31,7 @@ npm install
 cd ..
 ```
 
-## Running the Application
+## Local Run
 
 Run both the frontend and backend servers simultaneously:
 
@@ -47,9 +47,34 @@ Alternatively, run them separately:
 - Frontend only: `npm run dev`
 - Backend only: `npm run dev:server`
 
+The frontend uses `VITE_API_BASE_URL` when set, otherwise it defaults to `http://localhost:5174`.
+
+## Deploy API to Render
+
+1. Set the Render service root to `server/`.
+2. Build command: `npm install`
+3. Start command: `npm run start`
+4. Environment variables:
+   - `CORS_ORIGIN=https://YOUR_PAGES_DOMAIN.pages.dev`
+   - `PORT` is provided by Render automatically.
+
+If `CORS_ORIGIN` is not set in production, the server will allow all origins for demo purposes only. Set it for real deployments.
+
+## Deploy Frontend to Cloudflare Pages
+
+- Build command: `npm run build`
+- Build output directory: `dist`
+- Environment variables:
+  - `VITE_API_BASE_URL=https://YOUR_RENDER_SERVICE_URL`
+
+## Verify Deployment
+
+- Visit `https://YOUR_RENDER_SERVICE_URL/health` and confirm `{ "ok": true }`.
+- In the browser Network tab, confirm requests go to your Render API URL (not localhost).
+
 ## API Endpoints
 
-All endpoints are prefixed with `/api` and run on `http://localhost:5174`.
+All endpoints are served from the API base URL (default `http://localhost:5174`).
 
 ### GET /spells
 Get paginated list of spells.
@@ -107,6 +132,16 @@ Spell (with updated updatedAt)
 
 ### DELETE /spells/:id
 Delete a spell.
+
+**Response:**
+```json
+{
+  "ok": true
+}
+```
+
+### GET /health
+Health check endpoint.
 
 **Response:**
 ```json
@@ -176,24 +211,27 @@ Spells are persisted to `server/data/spells.json`. The file is created automatic
 - Validation errors return 400 status with error messages
 - Not found errors return 404 status
 - Server errors return 500 status
-- All errors use consistent JSON format: `{ "error": "message" }`
+- All errors use consistent JSON format: `{ "message": "..." }`
 
 ## Project Structure
 
 ```
 Spell-book/
 ├── package.json              # Root package with concurrently scripts
-├── vite.config.js            # Vite configuration with API proxy
+├── vite.config.js            # Vite configuration
 ├── index.html                # Main HTML file
 ├── src/
 │   ├── main.js               # Application bootstrap and event handlers
 │   ├── state.js              # State management
 │   ├── api.js                # API fetch helpers
+│   ├── config.js             # API base URL config
 │   ├── ui.js                 # UI rendering functions
 │   └── styles.css            # Grimoire aesthetic styling
 └── server/
+    ├── .env.example          # Server environment template
     ├── package.json           # Server dependencies
-    ├── index.js               # Express API routes
+    ├── app.js                 # Express app + routes
+    ├── index.js               # Server entrypoint
     ├── storage.js             # JSON file persistence
     └── data/
         └── spells.json        # Persisted spell data (auto-created)

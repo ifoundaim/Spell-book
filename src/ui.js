@@ -303,4 +303,31 @@ export function renderAll(state) {
   renderControls(state);
   renderSpellList(state);
   renderSpellEditor(state);
+  renderFooter(state);
+}
+
+/**
+ * Render footer status
+ */
+function renderFooter(state) {
+  const statusElement = document.getElementById('api-status');
+  if (!statusElement) return;
+
+  const apiStatus = state.apiStatus || { ok: null, message: 'Checking...' };
+
+  if (apiStatus.ok === true) {
+    statusElement.textContent = 'API: Connected';
+    statusElement.className = 'api-status api-status-ok';
+    return;
+  }
+
+  if (apiStatus.ok === false) {
+    const message = apiStatus.message ? ` (${apiStatus.message})` : '';
+    statusElement.textContent = `API: Not reachable${message}`;
+    statusElement.className = 'api-status api-status-error';
+    return;
+  }
+
+  statusElement.textContent = 'API: Checking...';
+  statusElement.className = 'api-status api-status-pending';
 }

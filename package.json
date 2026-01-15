@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "dev:server": "cd server && node index.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "vite": "^5.0.0",

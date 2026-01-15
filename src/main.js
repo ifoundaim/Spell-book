@@ -14,6 +14,9 @@ async function init() {
   // Set up event listeners
   setupEventListeners();
 
+  // Check API status (non-blocking)
+  void checkApiHealth();
+
   // Load initial spells
   await loadSpells(0);
 }
@@ -89,6 +92,24 @@ function setupEventListeners() {
       }
     }
   });
+}
+
+/**
+ * Check API health and update footer status
+ */
+async function checkApiHealth() {
+  state.setApiStatus({ ok: null, message: 'Checking...' });
+
+  try {
+    const result = await api.fetchHealth();
+    if (result?.ok) {
+      state.setApiStatus({ ok: true, message: 'Connected' });
+    } else {
+      state.setApiStatus({ ok: false, message: 'Unexpected response' });
+    }
+  } catch (error) {
+    state.setApiStatus({ ok: false, message: error.message || 'Not reachable' });
+  }
 }
 
 /**

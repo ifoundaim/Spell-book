@@ -11,6 +11,10 @@ let state = {
     delete: false
   },
   error: null,
+  apiStatus: {
+    ok: null,
+    message: 'Checking...'
+  },
   searchQuery: '',
   sortOrder: 'asc' // 'asc' | 'desc'
 };
@@ -95,6 +99,13 @@ export function setError(error) {
  */
 export function clearError() {
   updateState({ error: null });
+}
+
+/**
+ * Set API status
+ */
+export function setApiStatus(status) {
+  updateState({ apiStatus: status });
 }
 
 /**

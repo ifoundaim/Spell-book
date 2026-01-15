@@ -1,4 +1,22 @@
-const API_BASE = '/api';
+import { API_BASE_URL } from './config.js';
+
+const API_BASE = API_BASE_URL;
+
+async function parseErrorMessage(response, fallbackMessage) {
+  const error = await response.json().catch(() => ({}));
+  return error.message || error.error || fallbackMessage;
+}
+
+export async function fetchHealth() {
+  const response = await fetch(`${API_BASE}/health`);
+
+  if (!response.ok) {
+    const message = await parseErrorMessage(response, 'Failed to reach API');
+    throw new Error(message);
+  }
+
+  return response.json();
+}
 
 /**
  * Fetch paginated spells
@@ -8,8 +26,8 @@ export async function fetchSpells(limit = 20, offset = 0) {
     const response = await fetch(`${API_BASE}/spells?limit=${limit}&offset=${offset}`);
     
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Failed to fetch spells' }));
-      throw new Error(error.error || `HTTP ${response.status}`);
+      const message = await parseErrorMessage(response, 'Failed to fetch spells');
+      throw new Error(message);
     }
 
     return await response.json();
@@ -26,8 +44,8 @@ export async function fetchSpell(id) {
     const response = await fetch(`${API_BASE}/spells/${id}`);
     
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Spell not found' }));
-      throw new Error(error.error || `HTTP ${response.status}`);
+      const message = await parseErrorMessage(response, 'Spell not found');
+      throw new Error(message);
     }
 
     return await response.json();
@@ -50,8 +68,8 @@ export async function createSpell(spell) {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Failed to create spell' }));
-      throw new Error(error.error || `HTTP ${response.status}`);
+      const message = await parseErrorMessage(response, 'Failed to create spell');
+      throw new Error(message);
     }
 
     return await response.json();
@@ -74,8 +92,8 @@ export async function updateSpell(id, spell) {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Failed to update spell' }));
-      throw new Error(error.error || `HTTP ${response.status}`);
+      const message = await parseErrorMessage(response, 'Failed to update spell');
+      throw new Error(message);
     }
 
     return await response.json();
@@ -94,8 +112,8 @@ export async function deleteSpell(id) {
     });
 
     if (!response.ok) {
-      const error = await response.json().catch(() => ({ error: 'Failed to delete spell' }));
-      throw new Error(error.error || `HTTP ${response.status}`);
+      const message = await parseErrorMessage(response, 'Failed to delete spell');
+      throw new Error(message);
     }
 
     return await response.json();

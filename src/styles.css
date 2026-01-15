@@ -44,6 +44,39 @@ body {
   padding: 20px;
 }
 
+/* Footer */
+.app-footer {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 2px solid var(--border-ink);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--ink-light);
+}
+
+.api-status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-ink);
+  background: var(--parchment-dark);
+}
+
+.api-status-ok {
+  color: #166534;
+  border-color: #166534;
+}
+
+.api-status-error {
+  color: #8b1a1a;
+  border-color: #8b1a1a;
+}
+
+.api-status-pending {
+  color: var(--ink-light);
+}
+
 /* Header */
 .app-header {
   text-align: center;
