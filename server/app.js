@@ -40,33 +40,39 @@ const app = express();
 
 const LOCAL_ORIGIN = 'http://localhost:5173';
 const PROD_FRONTEND_ORIGIN = 'https://spell-book.pages.dev';
-const corsOrigin = process.env.CORS_ORIGIN;
-const isProduction = process.env.NODE_ENV === 'production';
-const allowAllOrigins = isProduction && !corsOrigin;
-const allowedOrigins = new Set([LOCAL_ORIGIN, PROD_FRONTEND_ORIGIN, corsOrigin].filter(Boolean));
+const ALLOWED_ORIGINS = new Set([LOCAL_ORIGIN, PROD_FRONTEND_ORIGIN]);
 
-if (allowAllOrigins) {
-  console.warn('CORS_ORIGIN not set; allowing all origins for demo only.');
+const corsBaseOptions = {
+  credentials: false,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 204
+};
+
+function corsOptionsDelegate(req, callback) {
+  const origin = req.header('Origin');
+
+  // Non-browser or same-origin requests: allow, but don't emit CORS headers.
+  if (!origin) {
+    return callback(null, { ...corsBaseOptions, origin: false });
+  }
+
+  if (ALLOWED_ORIGINS.has(origin)) {
+    return callback(null, { ...corsBaseOptions, origin });
+  }
+
+  // Disallowed origin: do not emit CORS headers. Do NOT 403; let browser enforce.
+  logToFile('CORS: origin not allowed', {
+    origin,
+    method: req.method,
+    url: req.originalUrl
+  });
+  return callback(null, { ...corsBaseOptions, origin: false });
 }
 
 // Middleware
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) {
-      return callback(null, true);
-    }
-
-    if (allowAllOrigins) {
-      return callback(null, true);
-    }
-
-    if (allowedOrigins.has(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(createError(403, 'CORS origin not allowed'));
-  }
-}));
+app.use(cors(corsOptionsDelegate));
+app.options('*', cors(corsOptionsDelegate));
 app.use(express.json());
 
 // Validation helpers
@@ -114,6 +120,29 @@ function validateSpell(spell, isUpdate = false) {
 }
 
 // Routes
+app.get('/debug', (req, res) => {
+  const safeHeaders = {
+    origin: req.headers.origin,
+    host: req.headers.host,
+    referer: req.headers.referer,
+    'user-agent': req.headers['user-agent'],
+    'access-control-request-method': req.headers['access-control-request-method'],
+    'access-control-request-headers': req.headers['access-control-request-headers']
+  };
+
+  res.json({
+    ok: true,
+    origin: req.headers.origin || null,
+    method: req.method,
+    url: req.originalUrl,
+    headers: safeHeaders,
+    env: {
+      NODE_ENV: process.env.NODE_ENV ?? null,
+      ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS ?? null
+    }
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({ ok: true });
 });

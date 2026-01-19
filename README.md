@@ -55,10 +55,16 @@ The frontend uses `VITE_API_BASE_URL` when set, otherwise it defaults to `http:/
 2. Build command: `npm install`
 3. Start command: `npm run start`
 4. Environment variables:
-   - `CORS_ORIGIN=https://YOUR_PAGES_DOMAIN.pages.dev`
    - `PORT` is provided by Render automatically.
+   - Optional: `NODE_ENV=production`
 
-If `CORS_ORIGIN` is not set in production, the server will allow all origins for demo purposes only. Set it for real deployments.
+### CORS (production)
+
+The API allows browser requests **only** from:
+- `http://localhost:5173`
+- `https://spell-book.pages.dev`
+
+Disallowed origins are not given CORS headers (the request still returns a normal HTTP response; the browser blocks access).
 
 ## Deploy Frontend to Cloudflare Pages
 
@@ -71,6 +77,37 @@ If `CORS_ORIGIN` is not set in production, the server will allow all origins for
 
 - Visit `https://YOUR_RENDER_SERVICE_URL/health` and confirm `{ "ok": true }`.
 - In the browser Network tab, confirm requests go to your Render API URL (not localhost).
+
+### CORS / preflight verification (curl)
+
+Replace the API base URL below with your Render URL if different:
+
+```bash
+API_BASE="https://spell-book-api-chag.onrender.com"
+ORIGIN="https://spell-book.pages.dev"
+
+# Basic health check (no Origin header)
+curl -i "$API_BASE/health"
+
+# CORS: allowed origin should get Access-Control-Allow-Origin
+curl -i -H "Origin: $ORIGIN" "$API_BASE/health"
+
+# Preflight: should return 204 with allow headers/methods
+curl -i -X OPTIONS \
+  -H "Origin: $ORIGIN" \
+  -H "Access-Control-Request-Method: GET" \
+  -H "Access-Control-Request-Headers: Content-Type" \
+  "$API_BASE/health"
+
+# Debug route (useful when troubleshooting CORS on production)
+curl -i -H "Origin: $ORIGIN" "$API_BASE/debug"
+```
+
+Expected headers (for the allowed origin):
+- `Access-Control-Allow-Origin: https://spell-book.pages.dev`
+- `Access-Control-Allow-Methods` includes `GET`
+- `Access-Control-Allow-Headers` includes `Content-Type`
+- `OPTIONS` returns `204`
 
 ## API Endpoints
 
@@ -228,7 +265,6 @@ Spell-book/
 │   ├── ui.js                 # UI rendering functions
 │   └── styles.css            # Grimoire aesthetic styling
 └── server/
-    ├── .env.example          # Server environment template
     ├── package.json           # Server dependencies
     ├── app.js                 # Express app + routes
     ├── index.js               # Server entrypoint
