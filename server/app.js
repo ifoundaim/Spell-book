@@ -39,10 +39,11 @@ function createError(status, message) {
 const app = express();
 
 const LOCAL_ORIGIN = 'http://localhost:5173';
+const PROD_FRONTEND_ORIGIN = 'https://spell-book.pages.dev';
 const corsOrigin = process.env.CORS_ORIGIN;
 const isProduction = process.env.NODE_ENV === 'production';
 const allowAllOrigins = isProduction && !corsOrigin;
-const allowedOrigins = new Set([LOCAL_ORIGIN, corsOrigin].filter(Boolean));
+const allowedOrigins = new Set([LOCAL_ORIGIN, PROD_FRONTEND_ORIGIN, corsOrigin].filter(Boolean));
 
 if (allowAllOrigins) {
   console.warn('CORS_ORIGIN not set; allowing all origins for demo only.');
@@ -120,8 +121,19 @@ app.get('/health', (req, res) => {
 // GET /spells - Paginated list
 app.get('/spells', (req, res, next) => {
   try {
-    const limit = parseInt(req.query.limit) || 20;
-    const offset = parseInt(req.query.offset) || 0;
+    const limitParam = req.query.limit;
+    const offsetParam = req.query.offset;
+
+    const limit = limitParam === undefined ? 20 : parseInt(String(limitParam), 10);
+    const offset = offsetParam === undefined ? 0 : parseInt(String(offsetParam), 10);
+
+    if (Number.isNaN(limit)) {
+      return next(createError(400, 'limit must be a number'));
+    }
+
+    if (Number.isNaN(offset)) {
+      return next(createError(400, 'offset must be a number'));
+    }
 
     if (limit < 1 || limit > 100) {
       return next(createError(400, 'limit must be between 1 and 100'));
