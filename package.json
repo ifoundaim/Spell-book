@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.91.0"
   }
 }

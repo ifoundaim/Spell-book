@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getSupabaseClientFromEnv } from './supabaseClient.js';
 import {
   getSpellById,
   addSpell,
@@ -37,6 +38,8 @@ function createError(status, message) {
 }
 
 const app = express();
+// Allow tests to override via `app.set('supabase', mockClient)`
+app.set('supabase', getSupabaseClientFromEnv());
 
 const LOCAL_ORIGIN = 'http://localhost:5173';
 const PROD_FRONTEND_ORIGIN = 'https://spell-book.pages.dev';
@@ -148,32 +151,51 @@ app.get('/health', (req, res) => {
 });
 
 // GET /spells - Paginated list
-app.get('/spells', (req, res, next) => {
+app.get('/spells', async (req, res, next) => {
   try {
-    const limitParam = req.query.limit;
-    const offsetParam = req.query.offset;
+    const limitParsed = parseInt(String(req.query.limit ?? '20'), 10);
+    const offsetParsed = parseInt(String(req.query.offset ?? '0'), 10);
 
-    const limit = limitParam === undefined ? 20 : parseInt(String(limitParam), 10);
-    const offset = offsetParam === undefined ? 0 : parseInt(String(offsetParam), 10);
-
-    if (Number.isNaN(limit)) {
+    if (Number.isNaN(limitParsed)) {
       return next(createError(400, 'limit must be a number'));
     }
 
-    if (Number.isNaN(offset)) {
+    if (Number.isNaN(offsetParsed)) {
       return next(createError(400, 'offset must be a number'));
     }
 
-    if (limit < 1 || limit > 100) {
-      return next(createError(400, 'limit must be between 1 and 100'));
+    const limit = Math.min(limitParsed, 50);
+    const offset = Math.max(offsetParsed, 0);
+
+    if (limit < 1) {
+      return next(createError(400, 'limit must be at least 1'));
     }
 
-    if (offset < 0) {
-      return next(createError(400, 'offset must be non-negative'));
+    const from = offset;
+    const to = offset + limit - 1;
+
+    const supabase = req.app.get('supabase');
+
+    // Back-compat for local dev when Supabase env vars aren't configured.
+    if (!supabase) {
+      const { items, total } = getSpellsPaginated(limit, offset);
+      return res.json({ items, limit, offset, total });
     }
 
-    const { items, total } = getSpellsPaginated(limit, offset);
-    res.json({ items, total });
+    const { data, error, count } = await supabase
+      .from('spells')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range(from, to);
+
+    if (error) return res.status(500).json({ error: error.message });
+
+    res.json({
+      items: data,
+      limit,
+      offset,
+      total: count ?? 0
+    });
   } catch (error) {
     console.error('Error fetching spells:', error);
     next(createError(500, 'Internal server error'));
@@ -181,15 +203,29 @@ app.get('/spells', (req, res, next) => {
 });
 
 // GET /spells/:id - Single spell
-app.get('/spells/:id', (req, res, next) => {
+app.get('/spells/:id', async (req, res, next) => {
   try {
-    const spell = getSpellById(req.params.id);
+    const supabase = req.app.get('supabase');
 
-    if (!spell) {
+    if (!supabase) {
+      return next(createError(500, 'Supabase client not configured'));
+    }
+
+    const { data, error } = await supabase
+      .from('spells')
+      .select('*')
+      .eq('id', req.params.id)
+      .maybeSingle();
+
+    if (error) {
+      return next(createError(500, error.message));
+    }
+
+    if (!data) {
       return next(createError(404, 'Spell not found'));
     }
 
-    res.json(spell);
+    res.json(data);
   } catch (error) {
     console.error('Error fetching spell:', error);
     next(createError(500, 'Internal server error'));
