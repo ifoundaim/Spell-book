@@ -233,12 +233,18 @@ app.get('/spells/:id', async (req, res, next) => {
 });
 
 // POST /spells - Create spell
-app.post('/spells', (req, res, next) => {
+app.post('/spells', async (req, res, next) => {
   try {
     const errors = validateSpell(req.body, false);
 
     if (errors.length > 0) {
       return next(createError(400, errors.join('; ')));
+    }
+
+    const supabase = req.app.get('supabase');
+
+    if (!supabase) {
+      return next(createError(500, 'Supabase client not configured'));
     }
 
     const now = new Date().toISOString();
@@ -251,12 +257,25 @@ app.post('/spells', (req, res, next) => {
       cooldownSec: req.body.cooldownSec || 0,
       description: req.body.description || '',
       ingredients: req.body.ingredients || [],
-      createdAt: now,
-      updatedAt: now
+      created_at: now,
+      updated_at: now
     };
 
-    const savedSpell = addSpell(spell);
-    res.status(201).json(savedSpell);
+    const { data, error } = await supabase
+      .from('spells')
+      .insert(spell)
+      .select()
+      .maybeSingle();
+
+    if (error) {
+      return next(createError(500, error.message));
+    }
+
+    if (!data) {
+      return next(createError(500, 'Failed to create spell'));
+    }
+
+    res.status(201).json(data);
   } catch (error) {
     console.error('Error creating spell:', error);
     next(createError(500, 'Internal server error'));
@@ -264,17 +283,17 @@ app.post('/spells', (req, res, next) => {
 });
 
 // PUT /spells/:id - Update spell
-app.put('/spells/:id', (req, res, next) => {
+app.put('/spells/:id', async (req, res, next) => {
   logToFile(`PUT /spells/${req.params.id}`, {
     spellId: req.params.id,
     updates: req.body
   });
 
   try {
-    const existingSpell = getSpellById(req.params.id);
+    const supabase = req.app.get('supabase');
 
-    if (!existingSpell) {
-      return next(createError(404, 'Spell not found'));
+    if (!supabase) {
+      return next(createError(500, 'Supabase client not configured'));
     }
 
     const errors = validateSpell(req.body, true);
@@ -285,7 +304,7 @@ app.put('/spells/:id', (req, res, next) => {
 
     const updates = {
       ...req.body,
-      updatedAt: new Date().toISOString()
+      updated_at: new Date().toISOString()
     };
 
     // Preserve id and createdAt
@@ -293,21 +312,30 @@ app.put('/spells/:id', (req, res, next) => {
       updates.name = req.body.name.trim();
     }
 
-    const updatedSpell = updateSpell(req.params.id, updates);
+    const { data, error } = await supabase
+      .from('spells')
+      .update(updates)
+      .eq('id', req.params.id)
+      .select()
+      .maybeSingle();
 
-    if (!updatedSpell) {
+    if (error) {
+      return next(createError(500, error.message));
+    }
+
+    if (!data) {
       return next(createError(404, 'Spell not found'));
     }
 
     logToFile(`PUT Success - Updated spell ${req.params.id}`, {
       spellId: req.params.id,
-      name: updatedSpell.name,
-      element: updatedSpell.element,
-      rarity: updatedSpell.rarity,
-      updatedAt: updatedSpell.updatedAt
+      name: data.name,
+      element: data.element,
+      rarity: data.rarity,
+      updatedAt: data.updated_at ?? null
     });
 
-    res.json(updatedSpell);
+    res.json(data);
   } catch (error) {
     console.error('Error updating spell:', error);
     next(createError(500, 'Internal server error'));
@@ -315,26 +343,35 @@ app.put('/spells/:id', (req, res, next) => {
 });
 
 // DELETE /spells/:id - Delete spell
-app.delete('/spells/:id', (req, res, next) => {
+app.delete('/spells/:id', async (req, res, next) => {
   try {
-    const spellToDelete = getSpellById(req.params.id);
+    const supabase = req.app.get('supabase');
 
-    if (!spellToDelete) {
-      return next(createError(404, 'Spell not found'));
+    if (!supabase) {
+      return next(createError(500, 'Supabase client not configured'));
     }
 
-    const deletedSpell = deleteSpell(req.params.id);
+    const { data, error } = await supabase
+      .from('spells')
+      .delete()
+      .eq('id', req.params.id)
+      .select()
+      .maybeSingle();
 
-    if (!deletedSpell) {
+    if (error) {
+      return next(createError(500, error.message));
+    }
+
+    if (!data) {
       return next(createError(404, 'Spell not found'));
     }
 
     logToFile(`DELETE /spells/${req.params.id}`, {
       spellId: req.params.id,
-      deletedSpell: deletedSpell
+      deletedSpell: data
     });
 
-    res.json({ ok: true, deleted: deletedSpell });
+    res.json({ ok: true, deleted: data });
   } catch (error) {
     console.error('Error deleting spell:', error);
     next(createError(500, 'Internal server error'));
