@@ -371,7 +371,7 @@ app.delete('/spells/:id', async (req, res, next) => {
       deletedSpell: data
     });
 
-    res.json({ ok: true, deleted: data });
+    res.status(204).send();
   } catch (error) {
     console.error('Error deleting spell:', error);
     next(createError(500, 'Internal server error'));
