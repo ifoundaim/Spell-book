@@ -37,6 +37,26 @@ function createError(status, message) {
   return error;
 }
 
+function toClientSpell(spell) {
+  if (!spell) return spell;
+
+  const {
+    mana_cost,
+    cooldown,
+    created_at,
+    updated_at,
+    ...rest
+  } = spell;
+
+  return {
+    ...rest,
+    manaCost: mana_cost ?? 0,
+    cooldownSec: cooldown ?? 0,
+    createdAt: created_at ?? null,
+    updatedAt: updated_at ?? null
+  };
+}
+
 const app = express();
 // Allow tests to override via `app.set('supabase', mockClient)`
 app.set('supabase', getSupabaseClientFromEnv());
@@ -196,7 +216,7 @@ app.get('/spells', async (req, res, next) => {
     if (error) return res.status(500).json({ error: error.message });
 
     res.json({
-      items: data,
+      items: (data || []).map(toClientSpell),
       limit,
       offset,
       total: count ?? 0
@@ -230,7 +250,7 @@ app.get('/spells/:id', async (req, res, next) => {
       return next(createError(404, 'Spell not found'));
     }
 
-    res.json(data);
+    res.json(toClientSpell(data));
   } catch (error) {
     console.error('Error fetching spell:', error);
     next(createError(500, 'Internal server error'));
@@ -258,8 +278,8 @@ app.post('/spells', async (req, res, next) => {
       name: req.body.name.trim(),
       element: req.body.element || 'Arcane',
       rarity: req.body.rarity || 'Common',
-      manaCost: req.body.manaCost || 0,
-      cooldownSec: req.body.cooldownSec || 0,
+      mana_cost: req.body.manaCost || 0,
+      cooldown: req.body.cooldownSec || 0,
       description: req.body.description || '',
       ingredients: req.body.ingredients || [],
       created_at: now,
@@ -280,7 +300,7 @@ app.post('/spells', async (req, res, next) => {
       return next(createError(500, 'Failed to create spell'));
     }
 
-    res.status(201).json(data);
+    res.status(201).json(toClientSpell(data));
   } catch (error) {
     console.error('Error creating spell:', error);
     next(createError(500, 'Internal server error'));
@@ -317,6 +337,16 @@ app.put('/spells/:id', async (req, res, next) => {
       updates.name = req.body.name.trim();
     }
 
+    if (updates.manaCost !== undefined) {
+      updates.mana_cost = updates.manaCost;
+      delete updates.manaCost;
+    }
+
+    if (updates.cooldownSec !== undefined) {
+      updates.cooldown = updates.cooldownSec;
+      delete updates.cooldownSec;
+    }
+
     const { data, error } = await supabase
       .from('spells')
       .update(updates)
@@ -340,7 +370,7 @@ app.put('/spells/:id', async (req, res, next) => {
       updatedAt: data.updated_at ?? null
     });
 
-    res.json(data);
+    res.json(toClientSpell(data));
   } catch (error) {
     console.error('Error updating spell:', error);
     next(createError(500, 'Internal server error'));
