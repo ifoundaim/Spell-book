@@ -43,7 +43,12 @@ app.set('supabase', getSupabaseClientFromEnv());
 
 const LOCAL_ORIGIN = 'http://localhost:5173';
 const PROD_FRONTEND_ORIGIN = 'https://spell-book.pages.dev';
-const ALLOWED_ORIGINS = new Set([LOCAL_ORIGIN, PROD_FRONTEND_ORIGIN]);
+const RENDER_FRONTEND_ORIGIN = 'https://spell-book-ccv1.onrender.com';
+const ALLOWED_ORIGINS = new Set([
+  LOCAL_ORIGIN,
+  PROD_FRONTEND_ORIGIN,
+  RENDER_FRONTEND_ORIGIN
+]);
 
 const corsBaseOptions = {
   credentials: false,
